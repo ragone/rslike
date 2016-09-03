@@ -59,7 +59,13 @@ impl Screen for PauseScreen {
     fn render(&mut self, game: &mut Game, console: &mut Console) {
         console.print_plain(Point::new(0, 0), "Paused");
 
-        let menu_location = Point::new(20, 20);
+        let longest_item = self.menu.items()
+                                    .max_by_key(|item| item.text().len())
+                                    .expect("No Items found")
+                                    .text().len() as i32;
+        let menu_location_x = console.size().x / 2 - longest_item / 2;
+        let menu_location_y = console.size().y / 2 - self.menu.items().count() as i32 / 2;
+        let menu_location = Point::new(menu_location_x, menu_location_y);
 
         for (i, menu_item) in self.menu.items().enumerate() {
             console.print_plain(menu_location.down(i as i32).right(2), menu_item.text());

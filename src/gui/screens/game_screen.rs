@@ -99,6 +99,7 @@ impl GameScreen {
                     Tile::Empty => Colors::BLACK,
                     Tile::Wall => Colors::DARKER_GREY,
                     Tile::Floor => Colors::DARKEST_SEPIA,
+                    Tile::Grass => Colors::DESATURATED_GREEN,
                 };
 
                 self.map.put(console, Point::new(x as i32, y as i32), ' ', Colors::WHITE, bg_color);
@@ -164,7 +165,7 @@ impl GameScreen {
 
     #[allow(unused)]
     fn view_can_move_down(&self, game: &Game) -> bool {
-        self.map_view.y + self.map.rect.height() < game.world.map.height()
+        self.map_view.y + self.map.rect.height() <= game.world.map.height()
     }
 
     #[allow(unused)]
@@ -174,6 +175,6 @@ impl GameScreen {
 
     #[allow(unused)]
     fn view_can_move_right(&self, game: &Game) -> bool {
-        self.map_view.x + self.map.rect.width() < game.world.map.width()
+        self.map_view.x + self.map.rect.width() <= game.world.map.width()
     }
 }

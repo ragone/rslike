@@ -32,7 +32,7 @@ impl Console {
         let console = tcod::RootConsole::initializer()
                         .size(width, height)
                         .title("rslike")
-                        .font(Path::new("assets/fonts/terminal12x12_gs_ro.png"), tcod::FontLayout::AsciiInRow)
+                        .font(Path::new("assets/fonts/dejavu16x16_gs_tc.png"), tcod::FontLayout::Tcod)
                         .font_type(tcod::FontType::Greyscale)
                         .init();
 

@@ -14,6 +14,30 @@ pub struct Map {
 }
 
 impl Map {
+    pub fn new() -> Map {
+        let mut tiles: Vec<Vec<Tile>> = vec!(vec!(Tile::Grass; 100); 100);
+        let starting_position = Point::new(5, 5);
+        let size = Size::new(100, 100);
+
+
+        for x in 0..tiles.len() {
+            for y in 0..tiles[x].len() {
+                let success = x.wrapping_rem(10) == 0 && y.wrapping_rem(10) == 0
+                || y == 0 || x == 0
+                || y == tiles[x].len() - 1 || x == tiles.len() - 1;
+                if success {
+                    tiles[x][y] = Tile::Wall
+                }
+            }
+        }
+
+        Map {
+            tiles: tiles,
+            size: size,
+            starting_position: starting_position,
+        }
+    }
+
     /// Creates a new map from a string.
     pub fn from_string(s: String) -> Map {
         let lines: Vec<&str> = s.split('\n')

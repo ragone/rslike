@@ -7,6 +7,7 @@ pub enum Tile {
     Empty,
     Wall,
     Floor,
+    Grass,
 }
 
 impl Tile {
@@ -15,6 +16,7 @@ impl Tile {
             Tile::Empty => true,
             Tile::Wall => false,
             Tile::Floor => true,
+            Tile::Grass => true,
         }
     }
 }
@@ -38,6 +40,7 @@ impl fmt::Debug for Tile {
             Tile::Empty => ' ',
             Tile::Wall => '#',
             Tile::Floor => '.',
+            _ => ' ',
         };
 
         write!(f, "{}", repr)

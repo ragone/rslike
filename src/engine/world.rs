@@ -9,7 +9,7 @@ pub struct World {
 
 impl World {
     pub fn new() -> World {
-        let map = Map::from_file("assets/maps/test.map");
+        let map = Map::new();
 
         World {
             player: Actor::new("Player", map.starting_position, 100),
