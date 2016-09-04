@@ -9,6 +9,7 @@ pub use self::widget::Widget;
 pub mod screens;
 pub mod chars;
 pub mod primitives;
+pub mod popups;
 
 mod colors;
 mod console;
