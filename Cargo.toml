@@ -1,13 +1,14 @@
 [package]
-name = "rslike"
+name = "verbonia"
 version = "0.0.1"
-authors = ["Jonny Gilchrist <jonnygilchrist@gmail.com>"]
+authors = ["Alex Ragone <ragonedk@gmail.com>", "Jonny Gilchrist <jonnygilchrist@gmail.com>"]
 
 [[bin]]
-name = "rslike"
+name = "verbonia"
 doc = false
 test = false
 doctest = false
 
 [dependencies]
 tcod = "0.9"
+tcod-sys = "4.0.0"

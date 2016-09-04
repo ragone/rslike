@@ -63,6 +63,7 @@ impl Screen for PauseScreen {
                                     .max_by_key(|item| item.text().len())
                                     .expect("No Items found")
                                     .text().len() as i32;
+
         let menu_location_x = console.size().x / 2 - longest_item / 2;
         let menu_location_y = console.size().y / 2 - self.menu.items().count() as i32 / 2;
         let menu_location = Point::new(menu_location_x, menu_location_y);

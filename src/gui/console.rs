@@ -1,3 +1,5 @@
+extern crate tcod_sys;
+
 use gui::{Color, Colors};
 use util::units::{AsTuple, Point, Size};
 
@@ -31,10 +33,15 @@ impl Console {
         let (width, height) = size.as_tuple();
         let console = tcod::RootConsole::initializer()
                         .size(width, height)
-                        .title("rslike")
-                        .font(Path::new("assets/fonts/dejavu16x16_gs_tc.png"), tcod::FontLayout::Tcod)
+                        .title("Verbonia")
+                        .font(Path::new("assets/fonts/font.png"), tcod::FontLayout::AsciiInRow)
                         .font_type(tcod::FontType::Greyscale)
+                        .font_dimensions(32, 64)
                         .init();
+
+        unsafe {
+            // tcod_sys::TCOD_console_map_ascii_code_to_font(64, 1, 1);
+        }
 
         Console {
             console: console,
@@ -57,8 +64,8 @@ impl Console {
     pub fn print(&mut self, pos: Point, text: &str, f_color: Color, b_color: Color) {
         self.console.set_default_background(b_color);
         self.console.set_default_foreground(f_color);
-        self.console.print_ex(pos.x, pos.y, tcod::BackgroundFlag::None, tcod::TextAlignment::Left, text);
-        self.console.set_default_background(Colors::BLACK);
+        self.console.print_ex(pos.x, pos.y, tcod::BackgroundFlag::Set, tcod::TextAlignment::Left, text);
+        self.console.set_default_background(Colors::Color::new(29, 29, 29));
         self.console.set_default_foreground(Colors::WHITE);
     }
 

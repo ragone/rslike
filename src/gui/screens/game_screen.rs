@@ -15,15 +15,15 @@ pub struct GameScreen {
 
 impl GameScreen {
     pub fn new() -> Box<Screen> {
-        let info_widget_location = Point::new(0, 0);
-        let map_widget_location = Point::new(15, 0);
-        let message_widget_location = Point::new(15, 40);
+        let info_widget_location = Point::new(0, 1);
+        let map_widget_location = Point::new(19, 1);
+        let message_widget_location = Point::new(19, 36);
 
         Box::new(
             GameScreen {
-                map: Widget::new(map_widget_location, Size::new(64, 39)),
-                info: Widget::new(info_widget_location, Size::new(14, 49)),
-                messages: Widget::new(message_widget_location, Size::new(64, 9)),
+                map: Widget::new(map_widget_location, Size::new(59, 34)),
+                info: Widget::new(info_widget_location, Size::new(18, 48)),
+                messages: Widget::new(message_widget_location, Size::new(59, 13)),
                 map_view: Point::new(0, 0),
             }
         )
@@ -79,6 +79,35 @@ impl GameScreen {
         primitives::draw_box_with_title(console, "Map", self.map.rect);
         primitives::draw_box_with_title(console, "Info", self.info.rect);
         primitives::draw_box_with_title(console, "Messages", self.messages.rect);
+
+        let width = console.size().x;
+        let height = console.size().y;
+
+        for x in 0..width {
+            for y in 0..height {
+                if y == 0 {
+                    console.put_plain(Point::new(x, y), '\u{80}');
+                } else if x == width - 1 {
+                    console.put_plain(Point::new(x, y), '\u{81}');
+                }
+            }
+        }
+        console.put_plain(Point::new(width - 1, 0), '\u{8}');
+        let bg_color = Colors::Color::new(236, 229, 206);
+        console.put_plain(Point::new(3, 0), '\u{8}');
+        console.put(Point::new(4, 0), ' ', Colors::WHITE, bg_color);
+        console.put(Point::new(5, 0), ' ', Colors::WHITE, bg_color);
+        console.put(Point::new(6, 0), ' ', Colors::WHITE, bg_color);
+        console.put(Point::new(7, 0), ' ', Colors::WHITE, bg_color);
+        console.put_plain(Point::new(8, 0), '\u{9}');
+
+        let map_loc = self.info.rect.size().x + 1;
+
+        console.put_plain(Point::new(map_loc + 3, 0), '\u{8}');
+        console.put(Point::new(map_loc + 4, 0), ' ', Colors::WHITE, bg_color);
+        console.put(Point::new(map_loc + 5, 0), ' ', Colors::WHITE, bg_color);
+        console.put(Point::new(map_loc + 6, 0), ' ', Colors::WHITE, bg_color);
+        console.put_plain(Point::new(map_loc + 7, 0), '\u{9}');
     }
 
     #[allow(unused)]
@@ -138,7 +167,7 @@ impl GameScreen {
         }
 
         if adjusted_pos.x >= self.map.rect.inner_location().x && adjusted_pos.y >= self.map.rect.inner_location().y {
-            self.map.put_plain(console, pos - self.map_view, '@');
+            self.map.put_plain(console, pos - self.map_view, '\u{40}');
         }
     }
 

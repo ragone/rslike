@@ -1,9 +1,9 @@
 extern crate tcod;
-extern crate rslike;
+extern crate verbonia;
 
-use rslike::gui::{Console, GUI};
-use rslike::engine::Game;
-use rslike::util::units::Size;
+use verbonia::gui::{Console, GUI};
+use verbonia::engine::Game;
+use verbonia::util::units::Size;
 
 fn main() {
     let game = Game::new();
