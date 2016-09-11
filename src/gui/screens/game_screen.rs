@@ -1,12 +1,9 @@
-use engine::{Game, Command, MessageType, Tile, Actor};
+use engine::{Game, Command, MessageType, Tile};
 use engine::log;
-use gui::{primitives, popups};
+use gui::{primitives};
 use gui::{Console, Colors, Key, Widget};
 use gui::screens::{self, Screen, ScreenChange};
 use util::units::{AsTuple, Direction, Point, Size};
-use tcod::input as input;
-use std::thread;
-use std::time::Duration;
 
 #[allow(missing_copy_implementations)]
 pub struct GameScreen {
@@ -14,11 +11,6 @@ pub struct GameScreen {
     info: Widget,
     messages: Widget,
     map_view: Point,
-    x_on_map: i32,
-    y_on_map: i32,
-    mouse_x: i32,
-    mouse_y: i32,
-    mut popups: Vec<popups::Popup>,
 }
 
 impl GameScreen {
@@ -33,11 +25,6 @@ impl GameScreen {
                 info: Widget::new(info_widget_location, Size::new(18, 48)),
                 messages: Widget::new(message_widget_location, Size::new(59, 13)),
                 map_view: Point::new(0, 0),
-                x_on_map: 0,
-                y_on_map: 0,
-                mouse_x: 0,
-                mouse_y: 0,
-                popups: Vec::new(),
             }
         )
     }
@@ -46,46 +33,27 @@ impl GameScreen {
 impl Screen for GameScreen {
     #[allow(unused)]
     fn input(&mut self, game: &mut Game, console: &mut Console) -> Option<ScreenChange> {
-
-        if let Some((_, event)) = input::check_for_event(input::KEY | input::MOUSE) {
-            match event {
-                input::Event::Key(ref key_state) => {
-                    match key_state {
-                        // Down => {
-                        //     game.do_command(Command::Walk(Direction::Up));
-                        // },
-                        // Down => {
-                        //     game.do_command(Command::Walk(Direction::Down));
-                        // },
-                        // Left => {
-                        //     game.do_command(Command::Walk(Direction::Left));
-                        // },
-                        // Right => {
-                        //     game.do_command(Command::Walk(Direction::Right));
-                        // },
-                        // Escape => {
-                        //     return Some(ScreenChange::AddScreen(screens::PauseScreen::new()));
-                        // },
-                        _ => {}
-                    }
+        if let Some(key) = console.check_for_keypress() {
+            match key {
+                Key::Up => {
+                    game.do_command(Command::Walk(Direction::Up));
                 },
-
-                input::Event::Mouse(ref mouse_state) => {
-                    self.mouse_x = mouse_state.cx as i32;
-                    self.mouse_y = mouse_state.cy as i32;
-                    // println!("{:?}", mouse_state);
-                    let selected_actor: Vec<&Actor> = game.world.actors.iter().filter(|actor| actor.pos().x == self.mouse_x && actor.pos().y == self.mouse_y).collect();
-                    if selected_actor.len() > 0 {
-                        println!("True");
-                    }
-
-                    self.x_on_map = self.mouse_x - self.map_view.x - self.map.rect.inner_location().x;
-                    self.y_on_map = self.mouse_y - self.map_view.y - self.map.rect.inner_location().y;
-
-
-                }
+                Key::Down => {
+                    game.do_command(Command::Walk(Direction::Down));
+                },
+                Key::Left => {
+                    game.do_command(Command::Walk(Direction::Left));
+                },
+                Key::Right => {
+                    game.do_command(Command::Walk(Direction::Right));
+                },
+                Key::Escape => {
+                    return Some(ScreenChange::AddScreen(screens::PauseScreen::new()));
+                },
+                _ => {}
             }
         }
+
         None
     }
 
@@ -102,27 +70,10 @@ impl Screen for GameScreen {
         self.draw_map(game, console);
         self.draw_player(game, console);
         self.draw_messages(game, console);
-        self.draw_popups(game, console);
     }
 }
 
 impl GameScreen {
-    #[allow(unused)]
-    fn draw_popups(&self, game: &mut Game, console: &mut Console) {
-        for mut popup in self.popups {
-            let mut slice = &game.world.player.name();
-            if popup.actor.pos().x == self.x_on_map && popup.actor.pos().y == self.y_on_map && !popup.is_visible {
-                for x in 0..slice.len() + 1 {
-                    console.print(Point::new(self.mouse_x + 2, self.mouse_y), &slice[..x], Colors::BLACK, Colors::Color::new(236, 229, 206));                    console.flush();
-                    thread::sleep(Duration::from_millis(1));
-                }
-                popup.set_visible(true);
-            } else if popup.is_visible {
-                console.print(Point::new(self.mouse_x + 2, self.mouse_y), &slice, Colors::BLACK, Colors::Color::new(236, 229, 206));
-            }
-        }
-    }
-
     #[allow(unused)]
     fn draw_borders(&self, game: &mut Game, console: &mut Console) {
         primitives::draw_box_with_title(console, "Map", self.map.rect);
